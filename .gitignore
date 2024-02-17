@@ -1,0 +1,18 @@
+# Visual Studio
+.vs
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+Debug
+bin
+obj
+packages
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
+
