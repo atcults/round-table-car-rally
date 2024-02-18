@@ -26,6 +26,10 @@ internal static partial class LoggingExtensions
     [LoggerMessage(LogLevel.Information, "Rally Configuration File {ConfigurationName} read successfully")]
     public static partial void RallyConfigReadSuccessful(this ILogger logger, string configurationName);
 
+    // Rally Configuration File read failed
+    [LoggerMessage(LogLevel.Error, "Rally Configuration File {ConfigurationName} read failed")]
+    public static partial void RallyConfigReadFailed(this ILogger logger, string configurationName);
+
     // Log invalid data format exception
     [LoggerMessage(LogLevel.Error, "Invalid data format: {MemberNames} : {Message}")]
     public static partial void InvalidDataFormat(this ILogger logger, string memberNames, string? message);
