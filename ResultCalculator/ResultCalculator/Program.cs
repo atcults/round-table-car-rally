@@ -7,7 +7,7 @@ logger.StartingApp("RallyCalculator");
 
 var reader = new RallyConfigReader(factory.CreateLogger<RallyConfigReader>());
 
-if(!reader.Read(out var config))
+if(!reader.Read(out RallyConfig? config))
 {
     return;
 }

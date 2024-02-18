@@ -3,11 +3,11 @@
 internal static partial class LoggingExtensions
 {
     // Starting: {AppName}
-    [LoggerMessage(LogLevel.Information, "Starting: {AppName}")]
+    [LoggerMessage(1001, LogLevel.Information, "Starting: {AppName}")]
     public static partial void StartingApp(this ILogger logger, string? appName);
 
     // Application is shutting down
-    [LoggerMessage(LogLevel.Information, "Application is shutting down")]
+    [LoggerMessage(1002, LogLevel.Information, "Application is shutting down")]
     public static partial void ShuttingDown(this ILogger logger);
 
     // {FileType} file not found at: {FilePath}
@@ -25,4 +25,12 @@ internal static partial class LoggingExtensions
     // Rally Configuration File read successfully
     [LoggerMessage(LogLevel.Information, "Rally Configuration File read successfully")]
     public static partial void RallyConfigRead(this ILogger logger);
+
+    // Log invalid data format exception
+    [LoggerMessage(LogLevel.Error, "Invalid data format: {MemberNames} : {Message}")]
+    public static partial void InvalidDataFormat(this ILogger logger, string memberNames, string? message);
+
+    // Log unhandled exception
+    [LoggerMessage(LogLevel.Error, "Unhandled exception: {Message}")]
+    public static partial void UnhandledException(this ILogger logger, string message);
 }

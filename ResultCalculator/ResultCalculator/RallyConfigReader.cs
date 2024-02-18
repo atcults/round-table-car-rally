@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 internal class RallyConfigReader(ILogger<RallyConfigReader> logger) : CsvReaderBase(logger)
 {
     private const string configPath = "./data/config.csv";
+
     public bool Read(out RallyConfig? config)
     {
         // Check if the file exists
@@ -33,15 +34,36 @@ internal class RallyConfigReader(ILogger<RallyConfigReader> logger) : CsvReaderB
             return false;
         }
 
-        config = new RallyConfig
+        // Get the first line
+        var line = lines.First();
+
+        try
         {
-            TableName = "Rally",
-            Year = 2021,
-            Date = new DateOnly(2021, 10, 1),
-            EarlyPenalty = 3,
-            LatePenalty = 1,
-            MissedPenalty = 100
-        };
+            config = new RallyConfig
+            {
+                TableName = line["Table Name"],
+                Date = DateOnly.ParseExact(line["DATE"], "ddMMyy"),
+                EarlyPenalty = int.Parse(line["Early Penalty"]),
+                LatePenalty = int.Parse(line["Late Penalty"]),
+                MissedPenalty = int.Parse(line["Missed Penalty"])
+            };
+
+            var results = config.Validate();
+            if (results.Count > 0)
+            {
+                foreach (var validationResult in results)
+                {
+                    _logger.InvalidDataFormat(string.Join(",", validationResult.MemberNames), validationResult.ErrorMessage);
+                }
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.UnhandledException(ex.Message);
+            config = null;
+            return false;
+        }        
 
         return true;
     }
