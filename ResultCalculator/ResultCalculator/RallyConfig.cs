@@ -24,31 +24,31 @@ internal class RallyConfig
     {
         var results = new List<ValidationResult>();
 
-        if(string.IsNullOrEmpty(TableName))
+        if (string.IsNullOrEmpty(TableName))
         {
             results.Add(new ValidationResult("TableName is required", [nameof(TableName)]));
         }
 
-        if(Date == default)
+        if (Date == default)
         {
             results.Add(new ValidationResult("Date is required", [nameof(Date)]));
         }
 
-        if(EarlyPenalty < 1 || EarlyPenalty > 5)
+        if (EarlyPenalty < 1 || EarlyPenalty > 5)
         {
             results.Add(new ValidationResult("EarlyPenalty should be between 1 and 5", [nameof(EarlyPenalty)]));
         }
 
-        if(LatePenalty < 1 || LatePenalty > 3)
+        if (LatePenalty < 1 || LatePenalty > 3)
         {
             results.Add(new ValidationResult("LatePenalty should be between 1 and 3", [nameof(LatePenalty)]));
         }
 
-        if(MissedPenalty < 20 || MissedPenalty > 100)
+        if (MissedPenalty < 20 || MissedPenalty > 100)
         {
             results.Add(new ValidationResult("MissedPenalty should be between 20 and 100", [nameof(MissedPenalty)]));
         }
-        
+
         return results;
     }
 }

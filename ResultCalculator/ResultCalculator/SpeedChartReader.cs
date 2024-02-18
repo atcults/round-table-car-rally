@@ -32,16 +32,25 @@ internal class SpeedChartReader(ILogger<SpeedChartReader> logger) : CsvReaderBas
             foreach (var item in lines)
             {
                 var reference = item["Reference"];
+
+                if (string.IsNullOrEmpty(reference))
+                {
+                    _logger.InvalidDataFormat("Reference", "Reference is required");
+                    return false;
+                }
+
                 if (!double.TryParse(item["From KM"], out double fromKM))
                 {
                     _logger.InvalidDataFormat("From KM", "From KM must be a number");
                     return false;
                 }
+
                 if (!double.TryParse(item["To KM"], out double toKM))
                 {
                     _logger.InvalidDataFormat("To KM", "To KM must be a number");
                     return false;
                 }
+
                 if (!double.TryParse(item["Average Speed"], out double averageSpeed))
                 {
                     _logger.InvalidDataFormat("Average Speed", "Average Speed must be a number");
@@ -78,4 +87,3 @@ internal class SpeedChartReader(ILogger<SpeedChartReader> logger) : CsvReaderBas
         return true;
     }
 }
-
