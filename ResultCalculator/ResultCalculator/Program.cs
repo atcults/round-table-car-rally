@@ -5,14 +5,21 @@ ILogger logger = factory.CreateLogger("Program");
 
 logger.StartingApp("RallyCalculator");
 
-var reader = new RallyConfigReader(factory.CreateLogger<RallyConfigReader>());
+var configReader = new RallyConfigReader(factory.CreateLogger<RallyConfigReader>());
 
-if(!reader.Read(out RallyConfig? config))
+if(!configReader.Read(out RallyConfig? config))
 {
     return;
 }
 
-logger.RallyConfigRead();
+logger.RallyConfigReadSuccessful("RallyConfig");
 
+var speedChartReader = new SpeedChartReader(factory.CreateLogger<SpeedChartReader>());
+if(!speedChartReader.Read(out List<SpeedReferencePoint> speedChart))
+{
+    return;
+}
+
+logger.RallyConfigReadSuccessful("RallyConfig");
 
 logger.ShuttingDown();

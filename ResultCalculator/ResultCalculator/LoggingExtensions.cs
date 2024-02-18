@@ -23,8 +23,8 @@ internal static partial class LoggingExtensions
     public static partial void FileLineCountMismatch(this ILogger logger, int expected, int actual);
 
     // Rally Configuration File read successfully
-    [LoggerMessage(LogLevel.Information, "Rally Configuration File read successfully")]
-    public static partial void RallyConfigRead(this ILogger logger);
+    [LoggerMessage(LogLevel.Information, "Rally Configuration File {ConfigurationName} read successfully")]
+    public static partial void RallyConfigReadSuccessful(this ILogger logger, string configurationName);
 
     // Log invalid data format exception
     [LoggerMessage(LogLevel.Error, "Invalid data format: {MemberNames} : {Message}")]
