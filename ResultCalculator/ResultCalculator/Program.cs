@@ -4,3 +4,15 @@ using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsol
 ILogger logger = factory.CreateLogger("Program");
 
 logger.StartingApp("RallyCalculator");
+
+var reader = new RallyConfigReader(factory.CreateLogger<RallyConfigReader>());
+
+if(!reader.Read(out var config))
+{
+    return;
+}
+
+logger.RallyConfigRead();
+
+
+logger.ShuttingDown();
