@@ -1,7 +1,7 @@
 ﻿using Csv;
 using Microsoft.Extensions.Logging;
 
-internal class MarshalChartReader(ILogger<MarshalChartReader> logger) : CsvReaderBase(logger)
+internal sealed class MarshalChartReader(ILogger<MarshalChartReader> logger) : CsvReaderBase(logger)
 {
     private const string configPath = "./data/marshal_chart.csv";
 

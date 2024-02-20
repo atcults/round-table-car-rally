@@ -8,6 +8,8 @@ internal class MarshalPoint
 
     public int BreakDuration { get; set; }
 
+    public double? TimeRequired { get; set; }
+
     /// <summary>
     /// PointName is required
     /// Distance is required and non-negative

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Spectre.Console;
 
 using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
 ILogger logger = factory.CreateLogger("Program");
@@ -8,12 +7,12 @@ logger.StartingApp("RallyCalculator");
 
 var configReader = new RallyConfigReader(factory.CreateLogger<RallyConfigReader>());
 
-if(!configReader.Read(out RallyConfig? config))
+if (!configReader.Read(out RallyConfig? config))
 {
     return;
 }
 
-if(config == null)
+if (config == null)
 {
     logger.RallyConfigReadFailed("Rally Configuration");
     return;
@@ -22,7 +21,7 @@ if(config == null)
 logger.RallyConfigReadSuccessful("Rally Configuration");
 
 var speedChartReader = new SpeedChartReader(factory.CreateLogger<SpeedChartReader>());
-if(!speedChartReader.Read(out List<SpeedReferencePoint> speedChart))
+if (!speedChartReader.Read(out List<SpeedReferencePoint> speedChart))
 {
     return;
 }
@@ -30,33 +29,23 @@ if(!speedChartReader.Read(out List<SpeedReferencePoint> speedChart))
 logger.RallyConfigReadSuccessful("Speed Chart");
 
 var marshalReader = new MarshalChartReader(factory.CreateLogger<MarshalChartReader>());
-if(!marshalReader.Read(out List<MarshalPoint> marshalChart))
+if (!marshalReader.Read(out List<MarshalPoint> marshalChart))
 {
     return;
 }
 
 logger.RallyConfigReadSuccessful("Marshal Chart");
 
-Console.WriteLine();
+// Compile the chart
+var compiler = new SegmentCompiler(factory.CreateLogger<SegmentCompiler>());
 
-AnsiConsole.MarkupLine($"[underline red]{config.TableName}[/]");
-
-// Create a table
-var table = new Table();
-
-// Add some columns
-table.AddColumn("Parameter");
-table.AddColumn("Value");
-
-// Add some rows
-table.AddRow("Date", $"[green]{config.Date}[/]");
-table.AddRow("Early Penalty", $"[green]{config.EarlyPenalty}[/]");
-table.AddRow("Late Penalty", $"[green]{config.LatePenalty}[/]");
-table.AddRow("Missed Penalty", $"[green]{config.MissedPenalty}[/]");
-
-// Render the table to the console
-AnsiConsole.Write(table);
+var compiledChart = compiler.CompileChart(speedChart, marshalChart);
 
 Console.WriteLine();
+
+DataPrintHelper.PrintConfiguration(config);
+DataPrintHelper.PrintSpeedChart(speedChart);
+DataPrintHelper.PrintMarshalChart(marshalChart);
+DataPrintHelper.PrintCompiledChart(compiledChart);
 
 logger.ShuttingDown();
