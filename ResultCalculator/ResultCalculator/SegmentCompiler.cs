@@ -34,8 +34,37 @@ internal class SegmentCompiler(ILogger<SegmentCompiler> logger) : CalculatorBase
                     ReferenceSpeed = speedReference.AverageSpeed,
                     TimeFromLastPoint = Math.Round((distanceDiff * 60) / speedReference.AverageSpeed, 2)
                 };
+
                 lastDistance = marshalPoint.Distance;
                 compiledSegments.Add(marshalSegment);
+
+                // Marshal time is the total time taken from last marshal point to the current marshal point
+                // Skip the calculation if the marshal point is the first point
+                if(marshalPoint.Distance == 0)
+                {
+                    marshalSegment.MarshalTime = 0;
+                }
+                else
+                {
+                    // Initialize the marshal time with the time required to reach the marshal point
+                    double marshalTime = marshalSegment.TimeFromLastPoint;
+
+                    for (var i = compiledSegments.Count - 2; i >= 0; i--)
+                    {
+                        if (compiledSegments[i].IsMarshalPoint)
+                        {
+                            break;
+                        }
+                        // Add the time taken to reach the previous point
+                        marshalTime += compiledSegments[i].TimeFromLastPoint;
+                    }                    
+
+                    // Marshal time is the total time taken from last marshal point to the current marshal point
+                    marshalSegment.MarshalTime = Math.Round(marshalTime,2);
+
+                    // Rounding off the marshal time to the nearest minute
+                    marshalPoint.MarshalTime = Math.Round(marshalTime, 0);
+                }
             }
 
             distanceDiff = Math.Round(speedReference.ToKM - lastDistance, 2);
@@ -56,6 +85,7 @@ internal class SegmentCompiler(ILogger<SegmentCompiler> logger) : CalculatorBase
                 TimeFromLastPoint = Math.Round((distanceDiff * 60) / speedReference.AverageSpeed, 2)
             };
 
+            lastDistance = speedReference.ToKM;
             compiledSegments.Add(segment);
         }
 

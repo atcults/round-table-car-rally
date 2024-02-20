@@ -61,11 +61,14 @@ internal static class DataPrintHelper
         table.AddColumn("Point Name");
         table.AddColumn("Distance");
         table.AddColumn("Break");
-        table.AddColumn("TTR");
+        table.AddColumn("MT");
 
         foreach (var item in marshalChart)
         {
-            table.AddRow(item.PointName, item.Distance.ToString(), item.BreakDuration.ToString(), item.TimeRequired.HasValue ? item.TimeRequired.Value.ToString() : "");
+            table.AddRow(item.PointName, 
+                item.Distance.ToString(), 
+                item.BreakDuration.ToString(), 
+                item.MarshalTime.ToString());
         }
 
         AnsiConsole.Write(table);
@@ -86,14 +89,16 @@ internal static class DataPrintHelper
         table.AddColumn("RD");
         table.AddColumn("SPEED");
         table.AddColumn("TTR");
+        table.AddColumn("MT");
 
         foreach (var item in compiledSegments)
         {
             table.AddRow(item.PointName ?? "",
-                item.CumulativeDistance.HasValue ? item.CumulativeDistance.Value.ToString() : "",
-                item.DistanceFromLastPoint.HasValue ? item.DistanceFromLastPoint.Value.ToString() : "",
-                item.ReferenceSpeed.HasValue ? item.ReferenceSpeed.Value.ToString() : "",
-                item.TimeFromLastPoint.HasValue ? item.TimeFromLastPoint.Value.ToString() : "");
+                item.CumulativeDistance.ToString(),
+                item.DistanceFromLastPoint.ToString(),
+                item.ReferenceSpeed.ToString(),
+                item.TimeFromLastPoint.ToString(),
+                item.MarshalTime.HasValue ? item.MarshalTime.Value.ToString() : "");
         }
 
         AnsiConsole.Write(table);
