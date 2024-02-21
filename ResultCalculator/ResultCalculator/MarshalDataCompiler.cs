@@ -23,9 +23,9 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                 {
                     PointName = currentMarshalPoint.PointName,
                     ScannedData = marshalDataRecord.MarshalScan[pIndex].Item2,
-                    BreakDuration = 0,
                     IsMissed = true,
-                    TimePenalty = config.MissedPenalty
+                    TimePenalty = config.MissedPenalty,
+                    ExpectedTimeToReach = currentMarshalPoint.TimeToReach
                 };
 
                 carRallyResult.MarshalPointRecords.Add(marshalPointRecord);

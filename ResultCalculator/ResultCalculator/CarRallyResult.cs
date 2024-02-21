@@ -30,7 +30,7 @@
         public TimeOnly ProxyDepartureScanTime { get; set; }
 
         // Break duration at the marshal point
-        public int BreakDuration { get; set; }
+        public int BreakDuration => (ProxyDepartureScanTime - ProxyArrivalScanTime).Minutes;
 
         // Time the car was expected to be scanned
         public int ExpectedTimeToReach { get; set; }

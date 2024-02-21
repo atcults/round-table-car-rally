@@ -166,12 +166,19 @@ internal static class DataPrintHelper
             // Add some columns
             table.AddColumn("Point Name");
             table.AddColumn("Is Missed");
+            table.AddColumn("Break");
             table.AddColumn("Time Penalty");
+            table.AddColumn("Marshal Time");
             table.AddColumn("Data Points");
 
             foreach (var item in result.MarshalPointRecords)
             {
-                table.AddRow(item.PointName, item.IsMissed.ToString(), item.TimePenalty.ToString(), string.Join(" | ", item.ScannedData));
+                table.AddRow(item.PointName, 
+                    item.IsMissed.ToString(), 
+                    item.BreakDuration.ToString(),
+                    item.TimePenalty.ToString(), 
+                    item.ExpectedTimeToReach.ToString(),
+                    string.Join(" | ", item.ScannedData));
             }
 
             AnsiConsole.Write(table);
