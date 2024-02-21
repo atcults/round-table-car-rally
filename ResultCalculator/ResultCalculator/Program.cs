@@ -63,6 +63,11 @@ if (File.Exists(".\\data\\marshal_data.csv"))
     var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marshalRecords);
 
     DataPrintHelper.PrintMarshalDataResults(results);
+
+    foreach (var item in results.OrderBy(r => r.GetTotalTimePenalty))
+    {
+        logger.LogInformation($"Car: {item.CarCode}, Penalty: {item.GetTotalTimePenalty}");
+    }
 }
 else
 {

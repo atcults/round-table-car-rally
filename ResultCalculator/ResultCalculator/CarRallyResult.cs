@@ -15,28 +15,30 @@
         public TimeOnly[] ScannedData { get; set; } = [];
 
         // Actual time the car was scanned
-        public TimeOnly? ActualArrivalTime { get; set; }
+        public TimeOnly? ArrivalTime { get; set; }
 
         // Actual departure time from the marshal point
-        public TimeOnly? ActualDepartureTime { get; set; }
+        public TimeOnly? DepartureTime { get; set; }
 
         // If the car was missed
         public bool IsMissed { get; set; }
 
-        // Proxy time for the arrival. If the car was missed, this will be the time the car was expected to arrive
-        public TimeOnly ProxyArrivalScanTime { get; set; }
-
-        // Proxy time for the departure. If the car was missed, this will be the time the car was expected to depart
-        public TimeOnly ProxyDepartureScanTime { get; set; }
-
         // Break duration at the marshal point
-        public int BreakDuration => (ProxyDepartureScanTime - ProxyArrivalScanTime).Minutes;
+        public int BreakDuration()
+        {
+            if (ArrivalTime.HasValue && DepartureTime.HasValue)
+            {
+                return (DepartureTime.Value - ArrivalTime.Value).Minutes;
+            }
 
-        // Time the car was expected to be scanned
-        public int ExpectedTimeToReach { get; set; }
+            return 0;
+        }
 
-        // Time the car was actually scanned
-        public int ActualTimeToReach { get; set; }
+        // Best time to reach the marshal point
+        public int BestTimeFromLastPoint { get; set; }
+
+        // Time taken from the last point
+        public int ActualTimeFromLastPoint { get; set; }
 
         // Difference between the actual and expected time
         public int TimeDifference { get; set; }

@@ -43,6 +43,7 @@ internal class RallyConfigReader(ILogger<RallyConfigReader> logger) : CsvReaderB
             {
                 TableName = line["Table Name"],
                 Date = DateOnly.ParseExact(line["DATE"], "ddMMyy"),
+                Time = TimeOnly.ParseExact(line["TIME"], "HH:mm"),
                 EarlyPenalty = int.Parse(line["Early Penalty"]),
                 LatePenalty = int.Parse(line["Late Penalty"]),
                 MissedPenalty = int.Parse(line["Missed Penalty"])

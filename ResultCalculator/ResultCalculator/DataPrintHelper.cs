@@ -164,24 +164,28 @@ internal static class DataPrintHelper
             };
 
             // Add some columns
-            table.AddColumn("Point Name");
+            table.AddColumn("Point");
             table.AddColumn("AAT");
             table.AddColumn("ADT");
             table.AddColumn("Missed");
             table.AddColumn("Break");
-            table.AddColumn("Time Penalty");
-            table.AddColumn("Marshal Time");
+            table.AddColumn("TT");
+            table.AddColumn("BT");
+            table.AddColumn("TD");
+            table.AddColumn("Penalty");
             table.AddColumn("Data Points");
 
             foreach (var item in result.MarshalPointRecords)
             {
                 table.AddRow(item.PointName,
-                    DataExtensions.TimeOnlyString(item.ActualArrivalTime),
-                    DataExtensions.TimeOnlyString(item.ActualDepartureTime),
-                    item.IsMissed?"Y":"N", 
-                    item.BreakDuration.ToString(),
+                    DataExtensions.TimeOnlyString(item.ArrivalTime),
+                    item.IsMissed ? $"[red]{DataExtensions.TimeOnlyString(item.DepartureTime)}[/]" : DataExtensions.TimeOnlyString(item.DepartureTime),
+                    item.IsMissed?"Y":"N",
+                    item.BreakDuration().ToString(),
+                    item.ActualTimeFromLastPoint.ToString(),
+                    item.BestTimeFromLastPoint.ToString(),
+                    item.TimeDifference.ToString(),
                     item.TimePenalty.ToString(), 
-                    item.ExpectedTimeToReach.ToString(),
                     string.Join(" | ", item.ScannedData));
             }
 
