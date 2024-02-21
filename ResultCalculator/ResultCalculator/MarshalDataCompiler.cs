@@ -28,6 +28,13 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                     ExpectedTimeToReach = currentMarshalPoint.TimeToReach
                 };
 
+                // Set the actual arrival and departure time
+                if (marshalDataRecord.MarshalScan[pIndex].Item2.Length > 0)
+                {
+                    marshalPointRecord.ActualArrivalTime = marshalDataRecord.MarshalScan[pIndex].Item2.FirstOrDefault();
+                    marshalPointRecord.ActualDepartureTime = marshalDataRecord.MarshalScan[pIndex].Item2.LastOrDefault();
+                }
+
                 carRallyResult.MarshalPointRecords.Add(marshalPointRecord);
             }
 

@@ -98,7 +98,7 @@ internal static class DataPrintHelper
                 item.DistanceFromLastPoint.ToString(),
                 item.ReferenceSpeed.ToString(),
                 item.TimeFromLastPoint.ToString(),
-                item.MarshalTime.HasValue ? item.MarshalTime.Value.ToString() : "");
+                DataExtensions.DoubleString(item.MarshalTime));
         }
 
         AnsiConsole.Write(table);
@@ -165,7 +165,9 @@ internal static class DataPrintHelper
 
             // Add some columns
             table.AddColumn("Point Name");
-            table.AddColumn("Is Missed");
+            table.AddColumn("AAT");
+            table.AddColumn("ADT");
+            table.AddColumn("Missed");
             table.AddColumn("Break");
             table.AddColumn("Time Penalty");
             table.AddColumn("Marshal Time");
@@ -173,8 +175,10 @@ internal static class DataPrintHelper
 
             foreach (var item in result.MarshalPointRecords)
             {
-                table.AddRow(item.PointName, 
-                    item.IsMissed.ToString(), 
+                table.AddRow(item.PointName,
+                    DataExtensions.TimeOnlyString(item.ActualArrivalTime),
+                    DataExtensions.TimeOnlyString(item.ActualDepartureTime),
+                    item.IsMissed?"Y":"N", 
                     item.BreakDuration.ToString(),
                     item.TimePenalty.ToString(), 
                     item.ExpectedTimeToReach.ToString(),
