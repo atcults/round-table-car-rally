@@ -48,4 +48,13 @@ DataPrintHelper.PrintSpeedChart(speedChart);
 DataPrintHelper.PrintMarshalChart(marshalChart);
 DataPrintHelper.PrintCompiledChart(compiledChart);
 
+// Reader Marshal Data if available
+if (File.Exists(".\\data\\marshal_data.csv"))
+{
+    var marshalDataReader = new MarshalDataReader(factory.CreateLogger<MarshalDataReader>());
+    if (!marshalDataReader.Read(marshalChart, out List<MarshalDataRecord> marshalRecords))
+    { return; }
+}
+
+
 logger.ShuttingDown();

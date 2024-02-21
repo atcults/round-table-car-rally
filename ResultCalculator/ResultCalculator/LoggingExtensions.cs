@@ -34,6 +34,26 @@ internal static partial class LoggingExtensions
     [LoggerMessage(LogLevel.Error, "Invalid data format: {MemberNames} : {Message}")]
     public static partial void InvalidDataFormat(this ILogger logger, string memberNames, string? message);
 
+    // Log missing CSV header
+    [LoggerMessage(LogLevel.Error, "Missing CSV header: {ExpectedHeader}")]
+    public static partial void MissingCsvHeader(this ILogger logger, string expectedHeader);
+
+    // Validating csv headers
+    [LoggerMessage(LogLevel.Information, "Validating csv headers.")]
+    public static partial void ValidatingCsvHeaders(this ILogger logger);
+
+    // Missing time captured for car number at marshal point
+    [LoggerMessage(LogLevel.Error, "Missing time captured for car number: {CarNumber} at marshal point: {MarshalPoint}")]
+    public static partial void MissingTimeCaptured(this ILogger logger, string carNumber, string marshalPoint);
+
+    // Log marshal data read line information
+    [LoggerMessage(LogLevel.Information, "Reading data line: {Line}")]
+    public static partial void ReadingDataLine(this ILogger logger, string line);
+
+    // Log missing CSV header at index
+    [LoggerMessage(LogLevel.Error, "Missing CSV header at index: {Index}. Expected: {ExpectedHeader}, Actual: {ActualHeader}")]
+    public static partial void MissingCsvHeaderAtIndex(this ILogger logger, int index, string expectedHeader, string actualHeader);
+
     // Log unhandled exception
     [LoggerMessage(LogLevel.Error, "Unhandled exception: {Message}")]
     public static partial void UnhandledException(this ILogger logger, string message);
