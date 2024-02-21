@@ -67,9 +67,9 @@ internal static class DataPrintHelper
 
         foreach (var item in marshalChart)
         {
-            table.AddRow(item.PointName, 
-                item.Distance.ToString(), 
-                item.BreakDuration.ToString(), 
+            table.AddRow(item.PointName,
+                item.Distance.ToString(),
+                item.BreakDuration.ToString(),
                 item.MarshalTime.ToString());
         }
 
@@ -101,6 +101,44 @@ internal static class DataPrintHelper
                 item.ReferenceSpeed.ToString(),
                 item.TimeFromLastPoint.ToString(),
                 item.MarshalTime.HasValue ? item.MarshalTime.Value.ToString() : "");
+        }
+
+        AnsiConsole.Write(table);
+    }
+
+    internal static void PrintMarshalData(List<MarshalDataRecord> marshalRecords)
+    {
+        if (marshalRecords.Count == 0)
+        {
+            AnsiConsole.Markup("[red]No Marshal Data found[/]");
+            return;
+        }
+
+        // Create a table
+        var table = new Table
+        {
+            // Add title
+            Title = new TableTitle($"[underline yellow]Marshal Data Chart[/]")
+        };
+
+        // Add some columns
+        table.AddColumn("Car Code");
+
+        foreach (var item in marshalRecords.First().TimeCaptured)
+        {
+            table.AddColumn(item.Item1);
+        }
+
+        foreach (var item in marshalRecords)
+        {
+            List<string> values =
+            [
+                item.CarCode
+            ];
+
+            values.AddRange(item.TimeCaptured.Select(x => x.Item2.HasValue ? x.Item2.Value.ToString() : ""));
+
+            table.AddRow(values.ToArray());
         }
 
         AnsiConsole.Write(table);

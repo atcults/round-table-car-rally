@@ -53,7 +53,11 @@ if (File.Exists(".\\data\\marshal_data.csv"))
 {
     var marshalDataReader = new MarshalDataReader(factory.CreateLogger<MarshalDataReader>());
     if (!marshalDataReader.Read(marshalChart, out List<MarshalDataRecord> marshalRecords))
-    { return; }
+    { 
+        return; 
+    }
+
+    DataPrintHelper.PrintMarshalData(marshalRecords);
 }
 
 
