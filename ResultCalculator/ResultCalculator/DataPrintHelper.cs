@@ -1,4 +1,6 @@
-﻿using Spectre.Console;
+﻿using Humanizer;
+using Spectre.Console;
+using System.Globalization;
 
 internal static class DataPrintHelper
 {
@@ -16,7 +18,7 @@ internal static class DataPrintHelper
         table.AddColumn("Value");
 
         // Add some rows
-        table.AddRow("Date", $"[green]{config.Date}[/]");
+        table.AddRow("When", $"[green]{config.Date.Humanize(culture: new CultureInfo("en-US", false))}[/]");
         table.AddRow("Early Penalty", $"[green]{config.EarlyPenalty}[/]");
         table.AddRow("Late Penalty", $"[green]{config.LatePenalty}[/]");
         table.AddRow("Missed Penalty", $"[green]{config.MissedPenalty}[/]");
