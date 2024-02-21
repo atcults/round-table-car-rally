@@ -28,9 +28,13 @@
 		<None Include="..\..\data\marshal_chart.csv" Link="data\marshal_chart.csv">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Include="..\..\data\marshal_data.csv" Link="data\marshal_data.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Include="..\..\data\speed_chart.csv" Link="data\speed_chart.csv">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Include="..\..\data\start.csv" Link="data\start.csv" />
 	</ItemGroup>
 
 </Project>
