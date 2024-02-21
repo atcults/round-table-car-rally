@@ -43,7 +43,7 @@ internal static partial class LoggingExtensions
     public static partial void ValidatingCsvHeaders(this ILogger logger);
 
     // Missing time captured for car number at marshal point
-    [LoggerMessage(LogLevel.Error, "Missing time captured for car number: {CarNumber} at marshal point: {MarshalPoint}")]
+    [LoggerMessage(LogLevel.Warning, "Missing time captured for car number: {CarNumber} at marshal point: {MarshalPoint}")]
     public static partial void MissingTimeCaptured(this ILogger logger, string carNumber, string marshalPoint);
 
     // Log marshal data read line information

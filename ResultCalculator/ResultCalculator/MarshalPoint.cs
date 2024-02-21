@@ -6,14 +6,11 @@ internal class MarshalPoint
 
     public double Distance { get; set; }
 
-    public int BreakDuration { get; set; }
-
-    public double MarshalTime { get; set; }
+    public int TimeToReach { get; set; }
 
     /// <summary>
     /// PointName is required
     /// Distance is required and non-negative
-    /// BreakDuration is optional and non-negative
     /// </summary>
     /// <returns></returns>
     public List<ValidationResult> Validate()
@@ -28,11 +25,6 @@ internal class MarshalPoint
         if (Distance < 0)
         {
             results.Add(new ValidationResult("Distance is required and non-negative", [nameof(Distance)]));
-        }
-
-        if (BreakDuration < 0)
-        {
-            results.Add(new ValidationResult("BreakDuration is optional and non-negative", [nameof(BreakDuration)]));
         }
 
         return results;

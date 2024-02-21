@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-internal class SegmentCompiler(ILogger<SegmentCompiler> logger) : CalculatorBase(logger)
+internal class SegmentCompiler(ILogger<SegmentCompiler> logger) : DataCompilerBase(logger)
 {
     public List<CompiledSegment> CompileChart(List<SpeedReferencePoint> speedReferences, List<MarshalPoint> marshalPoints)
     {
@@ -63,7 +63,7 @@ internal class SegmentCompiler(ILogger<SegmentCompiler> logger) : CalculatorBase
                     marshalSegment.MarshalTime = Math.Round(marshalTime,2);
 
                     // Rounding off the marshal time to the nearest minute
-                    marshalPoint.MarshalTime = Math.Round(marshalTime, 0);
+                    marshalPoint.TimeToReach = (int)marshalTime;
                 }
             }
 

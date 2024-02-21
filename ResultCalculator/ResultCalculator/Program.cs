@@ -58,6 +58,15 @@ if (File.Exists(".\\data\\marshal_data.csv"))
     }
 
     DataPrintHelper.PrintMarshalData(marshalRecords);
+
+    var marshalDataCompiler = new MarshalDataCompiler(factory.CreateLogger<MarshalDataCompiler>());
+    var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marshalRecords);
+
+    DataPrintHelper.PrintMarshalDataResults(results);
+}
+else
+{
+    logger.FileNotFound("Marshal Data", ".\\data\\marshal_data.csv");
 }
 
 

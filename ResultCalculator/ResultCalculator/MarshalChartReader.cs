@@ -51,17 +51,10 @@ internal sealed class MarshalChartReader(ILogger<MarshalChartReader> logger) : C
                     return false;
                 }
 
-                if (!int.TryParse(item["Break Duration"], out int breakDuration))
-                {
-                    _logger.InvalidDataFormat("Break Duration", "Distance must be a non-negative number");
-                    return false;
-                }
-
                 var marshalPoint = new MarshalPoint
                 {
                     PointName = pointName,
                     Distance = distance,
-                    BreakDuration = breakDuration
                 };
 
                 var results = marshalPoint.Validate();

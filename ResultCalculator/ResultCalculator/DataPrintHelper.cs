@@ -62,15 +62,13 @@ internal static class DataPrintHelper
         // Add column definitions
         table.AddColumn("Point Name");
         table.AddColumn("Distance");
-        table.AddColumn("Break");
-        table.AddColumn("MT");
+        table.AddColumn("TTR");
 
         foreach (var item in marshalChart)
         {
             table.AddRow(item.PointName,
                 item.Distance.ToString(),
-                item.BreakDuration.ToString(),
-                item.MarshalTime.ToString());
+                item.TimeToReach.ToString());
         }
 
         AnsiConsole.Write(table);
@@ -124,7 +122,7 @@ internal static class DataPrintHelper
         // Add some columns
         table.AddColumn("Car Code");
 
-        foreach (var item in marshalRecords.First().TimeCaptured)
+        foreach (var item in marshalRecords.First().MarshalScan)
         {
             table.AddColumn(item.Item1);
         }
@@ -136,11 +134,47 @@ internal static class DataPrintHelper
                 item.CarCode
             ];
 
-            values.AddRange(item.TimeCaptured.Select(x => x.Item2.HasValue ? x.Item2.Value.ToString() : ""));
+            foreach (var dataPoint in item.MarshalScan)
+            {
+                values.Add(string.Join(" | ", dataPoint.Item2));    
+            }
 
             table.AddRow(values.ToArray());
         }
 
         AnsiConsole.Write(table);
+    }
+
+    internal static void PrintMarshalDataResults(List<CarRallyResult> results)
+    {
+        if (results.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No Marshal Data Results found[/]");
+            return;
+        }
+
+        AnsiConsole.MarkupLine("[underline bold green]Round Table Rally Result[/]");
+
+        foreach (var result in results)
+        {
+            var table = new Table
+            {
+                // Add title
+                Title = new TableTitle($"[green]{result.CarCode} Penalty: {result.GetTotalTimePenalty}[/]")
+            };
+
+            // Add some columns
+            table.AddColumn("Point Name");
+            table.AddColumn("Is Missed");
+            table.AddColumn("Time Penalty");
+            table.AddColumn("Data Points");
+
+            foreach (var item in result.MarshalPointRecords)
+            {
+                table.AddRow(item.PointName, item.IsMissed.ToString(), item.TimePenalty.ToString(), string.Join(" | ", item.ScannedData));
+            }
+
+            AnsiConsole.Write(table);
+        }
     }
 }

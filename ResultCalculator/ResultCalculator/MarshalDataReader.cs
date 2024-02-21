@@ -93,7 +93,7 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
                     if (string.IsNullOrEmpty(strTime))
                     {
                         _logger.MissingTimeCaptured(carNumber, point.PointName);
-                        record.TimeCaptured.Add((point.PointName, null, null));
+                        record.MarshalScan.Add((point.PointName, []));
                         continue;
                     }
 
@@ -103,7 +103,7 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
                         return false;
                     }
 
-                    record.TimeCaptured.Add((point.PointName, marshalTime, null));
+                    record.MarshalScan.Add((point.PointName, [marshalTime]));
                 }
 
                 marshalRecords.Add(record);

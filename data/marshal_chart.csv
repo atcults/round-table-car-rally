@@ -1,9 +1,9 @@
-"Point Name","Distance","Break Duration"
-"START",00,0
-"Point 1",08,0
-"Point 2",17.3,0
-"Point 3",26.1,0
-"Point 4",38.4,15
-"Point 5",42.8,0
-"Point 6",47.4,0
-"FINISH",58.4,0
+"Point Name","Distance"
+"START",00
+"Point 1",08
+"Point 2",17.3
+"Point 3",26.1
+"Point 4",38.4
+"Point 5",42.8
+"Point 6",47.4
+"FINISH",58.4
