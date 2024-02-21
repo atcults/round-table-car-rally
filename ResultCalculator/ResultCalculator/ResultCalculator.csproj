@@ -35,7 +35,6 @@
 		<None Include="..\..\data\speed_chart.csv" Link="data\speed_chart.csv">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<None Include="..\..\data\start.csv" Link="data\start.csv" />
 	</ItemGroup>
 
 </Project>

@@ -19,6 +19,8 @@ internal static class DataPrintHelper
 
         // Add some rows
         table.AddRow("When", $"[green]{config.Date.Humanize(culture: new CultureInfo("en-US", false))}[/]");
+        table.AddRow("Time", $"[green]{config.Time}[/]");
+        table.AddRow("Participants", $"[green]{config.Participants}[/]");
         table.AddRow("Early Penalty", $"[green]{config.EarlyPenalty}[/]");
         table.AddRow("Late Penalty", $"[green]{config.LatePenalty}[/]");
         table.AddRow("Missed Penalty", $"[green]{config.MissedPenalty}[/]");

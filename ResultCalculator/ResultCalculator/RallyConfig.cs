@@ -8,6 +8,8 @@ internal class RallyConfig
 
     public required TimeOnly Time { get; set; }
 
+    public required int Participants { get; set; }
+
     public required int EarlyPenalty { get; set; }
 
     public required int LatePenalty { get; set; }
@@ -34,6 +36,11 @@ internal class RallyConfig
         if (Date == default)
         {
             results.Add(new ValidationResult("Date is required", [nameof(Date)]));
+        }
+
+        if(Participants == 0)
+        {
+            results.Add(new ValidationResult("Participants should be greater than 0", [nameof(Participants)]));
         }
 
         if (EarlyPenalty < 1 || EarlyPenalty > 5)

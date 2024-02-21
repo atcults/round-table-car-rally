@@ -49,30 +49,33 @@ DataPrintHelper.PrintMarshalChart(marshalChart);
 DataPrintHelper.PrintCompiledChart(compiledChart);
 
 // Reader Marshal Data if available
-if (File.Exists(".\\data\\marshal_data.csv"))
-{
-    var marshalDataReader = new MarshalDataReader(factory.CreateLogger<MarshalDataReader>());
-    if (!marshalDataReader.Read(marshalChart, out List<MarshalDataRecord> marshalRecords))
-    { 
-        return; 
-    }
-
-    DataPrintHelper.PrintMarshalData(marshalRecords);
-
-    var marshalDataCompiler = new MarshalDataCompiler(factory.CreateLogger<MarshalDataCompiler>());
-    var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marshalRecords);
-
-    DataPrintHelper.PrintMarshalDataResults(results);
-
-    foreach (var item in results.OrderBy(r => r.GetTotalTimePenalty))
-    {
-        logger.LogInformation($"Car: {item.CarCode}, Penalty: {item.GetTotalTimePenalty}");
-    }
-}
-else
+if (!File.Exists(".\\data\\marshal_data0.csv"))
 {
     logger.FileNotFound("Marshal Data", ".\\data\\marshal_data.csv");
+
+    var marshalDataBuilder = new MarshalDataBuilder(factory.CreateLogger<MarshalDataBuilder>());
+    if (!marshalDataBuilder.Build(config, marshalChart))
+    {
+        return;
+    }
 }
 
+var marshalDataReader = new MarshalDataReader(factory.CreateLogger<MarshalDataReader>());
+if (!marshalDataReader.Read(marshalChart, out List<MarshalDataRecord> marshalRecords))
+{
+    return;
+}
+
+DataPrintHelper.PrintMarshalData(marshalRecords);
+
+var marshalDataCompiler = new MarshalDataCompiler(factory.CreateLogger<MarshalDataCompiler>());
+var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marshalRecords);
+
+DataPrintHelper.PrintMarshalDataResults(results);
+
+foreach (var item in results.OrderBy(r => r.GetTotalTimePenalty))
+{
+    logger.LogInformation($"Car: {item.CarCode}, Penalty: {item.GetTotalTimePenalty}");
+}
 
 logger.ShuttingDown();
