@@ -28,7 +28,7 @@
         {
             if (ArrivalTime.HasValue && DepartureTime.HasValue)
             {
-                return (DepartureTime.Value - ArrivalTime.Value).Minutes;
+                return (int) (DepartureTime.Value - ArrivalTime.Value).TotalMinutes;
             }
 
             return 0;

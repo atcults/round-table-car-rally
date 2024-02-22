@@ -74,7 +74,7 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                         throw new InvalidOperationException(errorMsg);
                     }
 
-                    marshalPointRecord.ActualTimeFromLastPoint = (marshalPointRecord.ArrivalTime.Value - lastDepartureTime.Value).Minutes;
+                    marshalPointRecord.ActualTimeFromLastPoint = (int) (marshalPointRecord.ArrivalTime.Value - lastDepartureTime.Value).TotalMinutes;
                     marshalPointRecord.TimeDifference = marshalPointRecord.ActualTimeFromLastPoint - marshalPointRecord.BestTimeFromLastPoint;
                     marshalPointRecord.TimePenalty = marshalPointRecord.TimeDifference == 0 ? 0 
                         : marshalPointRecord.TimeDifference > 0 ? config.LatePenalty * marshalPointRecord.TimeDifference 

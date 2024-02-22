@@ -49,7 +49,7 @@ DataPrintHelper.PrintMarshalChart(marshalChart);
 DataPrintHelper.PrintCompiledChart(compiledChart);
 
 // Reader Marshal Data if available
-if (!File.Exists(".\\data\\marshal_data0.csv"))
+if (!File.Exists(".\\data\\marshal_data.csv"))
 {
     logger.FileNotFound("Marshal Data", ".\\data\\marshal_data.csv");
 
