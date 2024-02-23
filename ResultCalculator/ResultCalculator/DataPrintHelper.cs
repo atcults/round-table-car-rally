@@ -141,7 +141,7 @@ internal static class DataPrintHelper
 
             foreach (var dataPoint in item.MarshalScan)
             {
-                values.Add(string.Join(" | ", dataPoint.Item2));    
+                values.Add(string.Join(" | ", dataPoint.Item2));
             }
 
             table.AddRow(values.ToArray());
@@ -185,12 +185,12 @@ internal static class DataPrintHelper
                 table.AddRow(item.PointName,
                     DataExtensions.TimeOnlyString(item.ArrivalTime),
                     item.IsMissed ? $"[red]{DataExtensions.TimeOnlyString(item.DepartureTime)}[/]" : DataExtensions.TimeOnlyString(item.DepartureTime),
-                    item.IsMissed?"Y":"N",
+                    item.IsMissed ? "Y" : "N",
                     item.BreakDuration().ToString(),
                     item.ActualTimeFromLastPoint.ToString(),
                     item.BestTimeFromLastPoint.ToString(),
                     item.TimeDifference.ToString(),
-                    item.TimePenalty.ToString(), 
+                    item.TimePenalty.ToString(),
                     string.Join(" | ", item.ScannedData));
             }
 
@@ -239,14 +239,17 @@ internal static class DataPrintHelper
         };
 
         // Add some columns
+        orderedResultTable.AddColumn("Rank");
         orderedResultTable.AddColumn("Car Code");
         orderedResultTable.AddColumn("Time Started");
         orderedResultTable.AddColumn("Time Finished");
         orderedResultTable.AddColumn("Total Time");
         orderedResultTable.AddColumn("Total Penalty");
         orderedResultTable.AddColumn("Missed Marshals");
-
-        foreach (var item in results.OrderBy(x=>x.GetTotalPenalty))
+        int rank = 0;
+        var lastPenalty = 0;
+        int sameRankCount = 0;
+        foreach (var item in results.OrderBy(x => x.GetTotalPenalty))
         {
             var startTime = item.MarshalPointRecords.First().DepartureTime;
             var endTime = item.MarshalPointRecords.Last().ArrivalTime;
@@ -254,13 +257,23 @@ internal static class DataPrintHelper
             var totalTime = (endTime.HasValue && startTime.HasValue) ? (endTime.Value - startTime.Value).TotalMinutes : 0;
 
             var totalMissedPoints = item.MarshalPointRecords.Count(x => x.IsMissed);
-
-            orderedResultTable.AddRow(item.CarNumber.ToString(),
+            if (lastPenalty != item.GetTotalPenalty)
+            {
+                rank += sameRankCount;
+                rank++;
+                sameRankCount = 0;
+            }
+            orderedResultTable.AddRow(rank.ToString(), item.CarNumber.ToString(),
                 DataExtensions.TimeOnlyString(startTime),
                 DataExtensions.TimeOnlyString(endTime),
                 totalTime == 0 ? "" : TimeSpan.FromMinutes(totalTime).Humanize(2),
                 item.GetTotalPenalty.ToString(),
                 totalMissedPoints.ToString());
+            if (lastPenalty == item.GetTotalPenalty)
+            {
+                sameRankCount++;
+            }
+            lastPenalty = item.GetTotalPenalty;
         }
 
         AnsiConsole.Write(orderedResultTable);
