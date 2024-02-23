@@ -58,7 +58,7 @@ internal static class DataPrintHelper
         var table = new Table
         {
             // Add title
-            Title = new TableTitle($"[underline green]Marshal Chart[/]")
+            Title = new TableTitle($"[underline green]Marshal Chart {Environment.NewLine} {TimeSpan.FromMinutes(marshalChart.Sum(x => x.TimeToReach)).Humanize(2)}[/]")
         };
 
         // Add column definitions

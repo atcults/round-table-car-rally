@@ -126,7 +126,8 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
         }
 
         var csvWrite = CsvWriter.WriteToText([.. headers], rows, ',');
-        File.WriteAllText(".\\data\\rally_data0.csv", csvWrite);
+
+        File.WriteAllText(".\\data\\rally_data.csv", csvWrite);
 
         return true;
     }
