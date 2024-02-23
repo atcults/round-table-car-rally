@@ -97,13 +97,23 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
                         continue;
                     }
 
-                    if (!TimeOnly.TryParse(strTime, out TimeOnly marshalTime))
+                    var capturedDataPoints = strTime.Split('|');
+
+                    List<TimeOnly> detectedTimePoints = [];
+
+                    // parse all the times and validate
+                    foreach (var dataPoint in capturedDataPoints.Select(x=>x.Trim()))
                     {
-                        _logger.InvalidDataFormat(point.PointName, "Time should be in HH:MM:SS format");
-                        return false;
+                        if (!TimeOnly.TryParse(dataPoint, out TimeOnly timeCaptured))
+                        {
+                            _logger.InvalidDataFormat(point.PointName, "Time should be in HH:MM:SS format");
+                            return false;
+                        }
+
+                        detectedTimePoints.Add(timeCaptured);
                     }
 
-                    record.MarshalScan.Add((point.PointName, [marshalTime]));
+                    record.MarshalScan.Add((point.PointName, detectedTimePoints.ToArray()));
                 }
 
                 marshalRecords.Add(record);
