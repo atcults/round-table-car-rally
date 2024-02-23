@@ -1,13 +1,12 @@
 ﻿using Csv;
 using Microsoft.Extensions.Logging;
 
-// Reading ./data/config.csv file with "Csv" library
 internal class RallyConfigReader(ILogger<RallyConfigReader> logger) : CsvReaderBase(logger)
 {
-    private const string configPath = "./data/config.csv";
-
     public bool Read(out RallyConfig? config)
     {
+        var configPath = ConfigProvider.GetRallyConfigPath();
+
         // Check if the file exists
         if (!File.Exists(configPath))
         {

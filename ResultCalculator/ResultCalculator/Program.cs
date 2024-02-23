@@ -41,17 +41,23 @@ var compiler = new SegmentCompiler(factory.CreateLogger<SegmentCompiler>());
 
 var compiledChart = compiler.CompileChart(speedChart, marshalChart);
 
-Console.WriteLine();
-
 DataPrintHelper.PrintConfiguration(config);
 DataPrintHelper.PrintSpeedChart(speedChart);
 DataPrintHelper.PrintMarshalChart(marshalChart);
 DataPrintHelper.PrintCompiledChart(compiledChart);
 
-// Reader Marshal Data if available
-if (!File.Exists(".\\data\\marshal_data.csv"))
+Console.WriteLine("Do you want to continue? (Y/N)");
+var chose = Console.ReadLine();
+
+if (chose != "Y")
 {
-    logger.FileNotFound("Marshal Data", ".\\data\\marshal_data.csv");
+    return;
+}
+
+// Reader Marshal Data if available
+if (!File.Exists(ConfigProvider.GetMarshalDataPath()))
+{
+    logger.FileNotFound("Marshal Data", ConfigProvider.GetMarshalDataPath());
 
     var marshalDataBuilder = new MarshalDataBuilder(factory.CreateLogger<MarshalDataBuilder>());
     if (!marshalDataBuilder.Build(config, marshalChart))
@@ -74,3 +80,5 @@ var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marsh
 DataPrintHelper.PrintMarshalDataResults(results);
 
 logger.ShuttingDown();
+
+Console.ReadLine();

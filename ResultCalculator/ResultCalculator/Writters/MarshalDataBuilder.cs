@@ -1,5 +1,6 @@
 ﻿using Csv;
 using Microsoft.Extensions.Logging;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> logger) : CsvReaderBase(logger)
@@ -56,6 +57,8 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
             // Read each file.
             foreach (var file in files)
             {
+                _logger.ReadingFile(file, item.PointName);
+
                 var csv = File.ReadAllText(file);
 
                 var lines = CsvReader.ReadFromText(csv, _csvOptions);
@@ -98,7 +101,23 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
 
                     var row = records[carIndex - 1].Item2;
 
-                    var time = TimeOnly.ParseExact(line["Time Captured"], "HH:mm:ss");
+                    // Validating time against ISO 8601 format.
+                    var timeStr = line["Time Captured"];
+
+                    if (!DateTime.TryParseExact(timeStr, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                    {
+                        _logger.InvalidDataFormat("Time Captured", "Time should be in HH:MM:SS format");
+                        return false;
+                    }
+
+                    // check if same time captured for same car at same point.
+                    var time = TimeOnly.FromDateTime(dateTime);
+
+                    if (row[pIndex].ContainsKey(time))
+                    {
+                        _logger.SkippingDuplicateTime(carIndex, item.PointName);
+                        continue;
+                    }
 
                     row[pIndex].Add(time, time);
                 }

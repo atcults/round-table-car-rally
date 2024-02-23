@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 
 internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : CsvReaderBase(logger)
 {
-    private const string configPath = "./data/marshal_data.csv";
-
     /// <summary>
     /// Read data file and validates the records
     /// CSV should have following columns
@@ -19,6 +17,8 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
     /// <returns></returns>
     public bool Read(List<MarshalPoint> marshalPoints, out List<MarshalDataRecord> marshalRecords)
     {
+        var configPath = ConfigProvider.GetMarshalDataPath();
+
         marshalRecords = [];
 
         // Check if the file exists

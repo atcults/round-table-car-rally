@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 
 internal sealed class MarshalChartReader(ILogger<MarshalChartReader> logger) : CsvReaderBase(logger)
 {
-    private const string configPath = "./data/marshal_chart.csv";
-
     /// <summary>
     /// PointName is required
     /// Distance cannot be negative
@@ -14,6 +12,8 @@ internal sealed class MarshalChartReader(ILogger<MarshalChartReader> logger) : C
     /// <returns></returns>
     public bool Read(out List<MarshalPoint> marshalChart)
     {
+        var configPath = ConfigProvider.GetMarshalChartPath();
+
         marshalChart = [];
 
         // Check if the file exists

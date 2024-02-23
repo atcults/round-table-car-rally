@@ -1,13 +1,12 @@
 ﻿using Csv;
 using Microsoft.Extensions.Logging;
 
-// Reading ./data/speed_chart.csv file with "Csv" library
 internal class SpeedChartReader(ILogger<SpeedChartReader> logger) : CsvReaderBase(logger)
 {
-    private const string configPath = "./data/speed_chart.csv";
-
     public bool Read(out List<SpeedReferencePoint> speedChart)
     {
+        var configPath = ConfigProvider.GetSpeedChartPath();
+
         speedChart = [];
 
         // Check if the file exists

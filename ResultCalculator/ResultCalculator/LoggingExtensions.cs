@@ -14,6 +14,10 @@ internal static partial class LoggingExtensions
     [LoggerMessage(LogLevel.Error, "{FileType} file not found at: {FilePath}")]
     public static partial void FileNotFound(this ILogger logger, string fileType, string filePath);
 
+    // Reading {FileName} file for {MarshalPoint} point.
+    [LoggerMessage(LogLevel.Information, "Reading {FileName} file for {MarshalPoint} point.")]
+    public static partial void ReadingFile(this ILogger logger, string fileName, string marshalPoint);
+
     // File is empty
     [LoggerMessage(LogLevel.Error, "File is empty: {FilePath}")]
     public static partial void FileIsEmpty(this ILogger logger, string filePath);
@@ -45,6 +49,10 @@ internal static partial class LoggingExtensions
     // Missing time captured for car number at marshal point
     [LoggerMessage(LogLevel.Warning, "Missing time captured for car number: {CarNumber} at marshal point: {MarshalPoint}")]
     public static partial void MissingTimeCaptured(this ILogger logger, int carNumber, string marshalPoint);
+
+    // Skipping duplicate time for car number at marshal point
+    [LoggerMessage(LogLevel.Warning, "Skipping duplicate time for car number: {CarNumber} at marshal point: {MarshalPoint}")]
+    public static partial void SkippingDuplicateTime(this ILogger logger, int carNumber, string marshalPoint);
 
     // Log marshal data read line information
     [LoggerMessage(LogLevel.Information, "Reading data line: {Line}")]

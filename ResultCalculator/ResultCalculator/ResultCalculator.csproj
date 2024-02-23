@@ -18,23 +18,4 @@
 		<PackageReference Include="Spectre.Console.Cli" Version="0.48.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="data\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\data\config.csv" Link="data\config.csv">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Include="..\..\data\marshal_chart.csv" Link="data\marshal_chart.csv">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Include="..\..\data\marshal_data.csv" Link="data\marshal_data.csv">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Include="..\..\data\speed_chart.csv" Link="data\speed_chart.csv">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
 </Project>
