@@ -73,9 +73,4 @@ var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marsh
 
 DataPrintHelper.PrintMarshalDataResults(results);
 
-foreach (var item in results.OrderBy(r => r.GetTotalTimePenalty))
-{
-    logger.LogInformation($"Car: {item.CarCode}, Penalty: {item.GetTotalTimePenalty}");
-}
-
 logger.ShuttingDown();

@@ -1,6 +1,6 @@
 ﻿internal class CarRallyResult
 {
-    public required string CarCode { get; set; }
+    public required int CarNumber { get; set; }
 
     public List<CarMarshalPointRecord> MarshalPointRecords { get; set; } = [];
 

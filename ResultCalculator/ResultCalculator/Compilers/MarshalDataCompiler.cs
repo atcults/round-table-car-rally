@@ -10,9 +10,11 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
 
         foreach (var marshalDataRecord in marshalDataRecords)
         {
+            var carNumber = marshalDataRecord.CarNumber;
+
             var carRallyResult = new CarRallyResult
             {
-                CarCode = marshalDataRecord.CarCode
+                CarNumber = carNumber
             };
 
             // Initiate START point.
@@ -27,7 +29,7 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                 TimePenalty = config.MissedPenalty,
                 BestTimeFromLastPoint = 0,
                 ActualTimeFromLastPoint = 0,
-                DepartureTime = config.Time,
+                DepartureTime = config.Time.AddMinutes(carNumber),
                 TimeDifference = 0
             };
 
@@ -62,7 +64,7 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                 if (!lastMarshalPointRecord.DepartureTime.HasValue)
                 {
                     var errorMsg = "Could not find the departure time for the previous point. This should not happen. Please check the data and try again.";
-                    _logger.LogError(errorMsg);
+                    _logger.UnhandledException(errorMsg);
                     throw new InvalidOperationException(errorMsg);
                 }
 

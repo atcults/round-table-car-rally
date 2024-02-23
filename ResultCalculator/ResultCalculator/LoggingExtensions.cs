@@ -44,7 +44,7 @@ internal static partial class LoggingExtensions
 
     // Missing time captured for car number at marshal point
     [LoggerMessage(LogLevel.Warning, "Missing time captured for car number: {CarNumber} at marshal point: {MarshalPoint}")]
-    public static partial void MissingTimeCaptured(this ILogger logger, string carNumber, string marshalPoint);
+    public static partial void MissingTimeCaptured(this ILogger logger, int carNumber, string marshalPoint);
 
     // Log marshal data read line information
     [LoggerMessage(LogLevel.Information, "Reading data line: {Line}")]

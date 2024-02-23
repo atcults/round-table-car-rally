@@ -64,16 +64,16 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
             {
                 _logger.ReadingDataLine(item.Raw);
 
-                var carNumber = item["Car Number"];
+                var carNumStr = item["Car Number"];
 
-                if (string.IsNullOrEmpty(carNumber))
+                if (string.IsNullOrEmpty(carNumStr))
                 {
                     _logger.InvalidDataFormat("Car Number", "Car Number is required");
                     return false;
                 }
 
                 // validate values.
-                if(!int.TryParse(carNumber, out int carNum) || carNum < 1 || carNum > 999)
+                if(!int.TryParse(carNumStr, out int carNum) || carNum < 1 || carNum > 999)
                 {
                     _logger.InvalidDataFormat("Car Number", "Car Number should be between 1 and 999");
                     return false;
@@ -82,7 +82,7 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
                 var record = new MarshalDataRecord
                 {
                     // Padding car number with 0
-                    CarCode = $"ART40/24/{carNumber.PadLeft(3, '0')}"
+                    CarNumber = carNum
                 };
 
                 foreach (var point in marshalPoints)
@@ -92,7 +92,7 @@ internal sealed class MarshalDataReader(ILogger<MarshalDataReader> logger) : Csv
                     // marshal point time is optional
                     if (string.IsNullOrEmpty(strTime))
                     {
-                        _logger.MissingTimeCaptured(carNumber, point.PointName);
+                        _logger.MissingTimeCaptured(carNum, point.PointName);
                         record.MarshalScan.Add((point.PointName, []));
                         continue;
                     }

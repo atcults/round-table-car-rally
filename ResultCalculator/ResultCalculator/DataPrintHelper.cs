@@ -133,7 +133,7 @@ internal static class DataPrintHelper
         {
             List<string> values =
             [
-                item.CarCode
+                item.CarNumber.ToString()
             ];
 
             foreach (var dataPoint in item.MarshalScan)
@@ -162,7 +162,7 @@ internal static class DataPrintHelper
             var table = new Table
             {
                 // Add title
-                Title = new TableTitle($"[green]{result.CarCode} Penalty: {result.GetTotalTimePenalty}[/]")
+                Title = new TableTitle($"[green]{result.CarNumber} Penalty: {result.GetTotalTimePenalty}[/]")
             };
 
             // Add some columns
@@ -193,5 +193,75 @@ internal static class DataPrintHelper
 
             AnsiConsole.Write(table);
         }
+
+        // Print Result Table
+        var resultTable = new Table
+        {
+            // Add title
+            Title = new TableTitle($"[underline green]Result Table[/]")
+        };
+
+        // Add some columns
+        resultTable.AddColumn("Car Code");
+        resultTable.AddColumn("Time Started");
+        resultTable.AddColumn("Time Finished");
+        resultTable.AddColumn("Total Time");
+        resultTable.AddColumn("Total Penalty");
+        resultTable.AddColumn("Missed Marshals");
+
+        foreach (var item in results)
+        {
+            var startTime = item.MarshalPointRecords.First().DepartureTime;
+            var endTime = item.MarshalPointRecords.Last().ArrivalTime;
+
+            var totalTime = (endTime.HasValue && startTime.HasValue) ? (endTime.Value - startTime.Value).TotalMinutes : 0;
+
+            var totalMissedPoints = item.MarshalPointRecords.Count(x => x.IsMissed);
+
+            resultTable.AddRow(item.CarNumber.ToString(),
+                DataExtensions.TimeOnlyString(startTime),
+                DataExtensions.TimeOnlyString(endTime),
+                TimeSpan.FromMinutes(totalTime).Humanize(2),
+                item.GetTotalTimePenalty.ToString(),
+                totalMissedPoints.ToString());
+        }
+
+        AnsiConsole.Write(resultTable);
+
+        // Ordered Result Table
+        var orderedResultTable = new Table
+        {
+            // Add title
+            Title = new TableTitle($"[underline green]Result Table[/]")
+        };
+
+        // Add some columns
+        orderedResultTable.AddColumn("Car Code");
+        orderedResultTable.AddColumn("Time Started");
+        orderedResultTable.AddColumn("Time Finished");
+        orderedResultTable.AddColumn("Total Time");
+        orderedResultTable.AddColumn("Total Penalty");
+        orderedResultTable.AddColumn("Missed Marshals");
+
+        foreach (var item in results.OrderBy(x=>x.GetTotalTimePenalty))
+        {
+            var startTime = item.MarshalPointRecords.First().DepartureTime;
+            var endTime = item.MarshalPointRecords.Last().ArrivalTime;
+
+            var totalTime = (endTime.HasValue && startTime.HasValue) ? (endTime.Value - startTime.Value).TotalMinutes : 0;
+
+            var totalMissedPoints = item.MarshalPointRecords.Count(x => x.IsMissed);
+
+            orderedResultTable.AddRow(item.CarNumber.ToString(),
+                DataExtensions.TimeOnlyString(startTime),
+                DataExtensions.TimeOnlyString(endTime),
+                totalTime == 0 ? "" : TimeSpan.FromMinutes(totalTime).Humanize(2),
+                item.GetTotalTimePenalty.ToString(),
+                totalMissedPoints.ToString());
+        }
+
+        AnsiConsole.Write(orderedResultTable);
+
+
     }
 }
