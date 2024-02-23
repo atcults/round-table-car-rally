@@ -1,6 +1,5 @@
 ﻿using Csv;
 using Microsoft.Extensions.Logging;
-using System.Globalization;
 using System.Text.RegularExpressions;
 
 internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> logger) : CsvReaderBase(logger)
@@ -20,7 +19,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
     /// <returns></returns>
     public bool Build(RallyConfig config, List<MarshalPoint> marshalPoints)
     {
-        var headers = new List<string> { "Car Code" };
+        var headers = new List<string> { "Car Number" };
 
         headers.AddRange(marshalPoints.Select(x => x.PointName));
 
@@ -104,7 +103,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
                     // Validating time against ISO 8601 format.
                     var timeStr = line["Time Captured"];
 
-                    if (!DateTime.TryParseExact(timeStr, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                    if (!DateTime.TryParse(timeStr, out DateTime dateTime))
                     {
                         _logger.InvalidDataFormat("Time Captured", "Time should be in HH:MM:SS format");
                         return false;
@@ -138,7 +137,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
             for (int j = 0; j < marshalPoints.Count; j++)
             {
                 var point = record.Item2[j];
-                rowValue.Add(string.Join(" | ", point.Select(x => x.Value.ToString())));
+                rowValue.Add(string.Join(" | ", point.Select(x => x.Value.ToString("HH:mm:ss"))));
             }
 
             rows.Add([.. rowValue]);
@@ -146,7 +145,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
 
         var csvWrite = CsvWriter.WriteToText([.. headers], rows, ',');
 
-        File.WriteAllText(".\\data\\rally_data.csv", csvWrite);
+        File.WriteAllText(Path.Combine(ConfigProvider.GetDataPath(), "marshal_data.csv"), csvWrite);
 
         return true;
     }

@@ -47,9 +47,9 @@ DataPrintHelper.PrintMarshalChart(marshalChart);
 DataPrintHelper.PrintCompiledChart(compiledChart);
 
 Console.WriteLine("Do you want to continue? (Y/N)");
-var chose = Console.ReadLine();
+var choice = Console.ReadLine();
 
-if (chose != "Y")
+if (string.Compare(choice, "Y", true) != 0)
 {
     return;
 }
