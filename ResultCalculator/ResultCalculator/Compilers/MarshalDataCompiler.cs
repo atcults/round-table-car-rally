@@ -7,7 +7,7 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
         _logger.LogInformation("Compiling the marshal data");
 
         var results = new List<CarRallyResult>();
-        
+
         foreach (var marshalDataRecord in marshalDataRecords)
         {
             var carRallyResult = new CarRallyResult
@@ -31,7 +31,7 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                 TimeDifference = 0
             };
 
-            if(startMdp.Length > 0)
+            if (startMdp.Length > 0)
             {
                 startPointRecord.DepartureTime = startMdp.LastOrDefault();
                 startPointRecord.IsMissed = false;
@@ -44,7 +44,7 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
             for (int pIndex = 1; pIndex < marshalPoints.Count; pIndex++)
             {
                 MarshalPoint? currentMarshalPoint = marshalPoints[pIndex];
-                
+
                 TimeOnly[] currentMdp = marshalDataRecord.MarshalScan[pIndex].Item2;
 
                 var marshalPointRecord = new CarRallyResult.CarMarshalPointRecord
@@ -59,31 +59,36 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                 // Calculate time taken from the last point
                 var lastMarshalPointRecord = carRallyResult.MarshalPointRecords.Last();
 
-                // Set the actual arrival and departure time
-                if (currentMdp.Length > 0)
+                if (!lastMarshalPointRecord.DepartureTime.HasValue)
                 {
-                    marshalPointRecord.ArrivalTime = marshalDataRecord.MarshalScan[pIndex].Item2.FirstOrDefault();
-                    marshalPointRecord.DepartureTime = marshalDataRecord.MarshalScan[pIndex].Item2.LastOrDefault();
+                    var errorMsg = "Could not find the departure time for the previous point. This should not happen. Please check the data and try again.";
+                    _logger.LogError(errorMsg);
+                    throw new InvalidOperationException(errorMsg);
+                }
+
+                var lastDepartureTime = lastMarshalPointRecord.DepartureTime.Value;
+
+                // Set the actual arrival and departure time
+                if (currentMdp.Length > 0 && currentMdp.First() > lastDepartureTime)
+                {
                     marshalPointRecord.IsMissed = false;
 
-                    var lastDepartureTime = lastMarshalPointRecord.DepartureTime;
-                    if(!lastDepartureTime.HasValue)
-                    {
-                        var errorMsg = "Could not find the departure time for the previous point. This should not happen. Please check the data and try again.";
-                        _logger.LogError(errorMsg);
-                        throw new InvalidOperationException(errorMsg);
-                    }
+                    var arrivalTime = currentMdp.First();
+                    var departureTime = currentMdp.Last();
 
-                    marshalPointRecord.ActualTimeFromLastPoint = (int) (marshalPointRecord.ArrivalTime.Value - lastDepartureTime.Value).TotalMinutes;
+                    marshalPointRecord.ArrivalTime = arrivalTime;
+                    marshalPointRecord.DepartureTime = departureTime;
+                    
+                    marshalPointRecord.ActualTimeFromLastPoint = (int)(marshalPointRecord.ArrivalTime.Value - lastDepartureTime).TotalMinutes;
                     marshalPointRecord.TimeDifference = marshalPointRecord.ActualTimeFromLastPoint - marshalPointRecord.BestTimeFromLastPoint;
-                    marshalPointRecord.TimePenalty = marshalPointRecord.TimeDifference == 0 ? 0 
-                        : marshalPointRecord.TimeDifference > 0 ? config.LatePenalty * marshalPointRecord.TimeDifference 
+                    marshalPointRecord.TimePenalty = marshalPointRecord.TimeDifference == 0 ? 0
+                        : marshalPointRecord.TimeDifference > 0 ? config.LatePenalty * marshalPointRecord.TimeDifference
                         : -1 * config.EarlyPenalty * marshalPointRecord.TimeDifference;
                 }
                 else
                 {
                     // Set departure time to the previous point's departure time plus best time to reach the current point
-                    marshalPointRecord.DepartureTime = lastMarshalPointRecord.DepartureTime?.AddMinutes(currentMarshalPoint.TimeToReach);
+                    marshalPointRecord.DepartureTime = lastDepartureTime.AddMinutes(currentMarshalPoint.TimeToReach);
                 }
 
                 carRallyResult.MarshalPointRecords.Add(marshalPointRecord);
