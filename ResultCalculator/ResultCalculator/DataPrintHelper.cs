@@ -221,7 +221,7 @@ internal static class DataPrintHelper
             resultTable.AddRow(item.CarNumber.ToString(),
                 DataExtensions.TimeOnlyString(startTime),
                 DataExtensions.TimeOnlyString(endTime),
-                TimeSpan.FromMinutes(totalTime).Humanize(2),
+                totalTime == 0 ? "" : TimeSpan.FromMinutes(totalTime).Humanize(2),
                 item.GetTotalTimePenalty.ToString(),
                 totalMissedPoints.ToString());
         }
