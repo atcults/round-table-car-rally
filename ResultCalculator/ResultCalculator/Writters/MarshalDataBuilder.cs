@@ -46,7 +46,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
         {
             MarshalPoint? item = marshalPoints[pIndex];
 
-            var files = Directory.GetFiles(".\\data", $"{item.PointName}.*.csv");
+            var files = Directory.GetFiles(ConfigProvider.GetDataPath(), $"{item.PointName}.*.csv");
 
             if (files.Length == 0)
             {

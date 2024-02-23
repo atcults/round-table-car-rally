@@ -46,7 +46,8 @@ internal class RallyConfigReader(ILogger<RallyConfigReader> logger) : CsvReaderB
                 Participants = int.Parse(line["Participants"]),
                 EarlyPenalty = int.Parse(line["Early Penalty"]),
                 LatePenalty = int.Parse(line["Late Penalty"]),
-                MissedPenalty = int.Parse(line["Missed Penalty"])
+                MissedPenalty = int.Parse(line["Missed Penalty"]),
+                ExtraBreakPenalty = int.Parse(line["Extra Break Penalty"])
             };
 
             var results = config.Validate();

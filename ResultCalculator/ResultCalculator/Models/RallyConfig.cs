@@ -16,6 +16,8 @@ internal class RallyConfig
 
     public required int MissedPenalty { get; set; }
 
+    public required int ExtraBreakPenalty { get; set; }
+
     /// <summary>
     /// TableName is required
     /// Date is required
@@ -53,9 +55,14 @@ internal class RallyConfig
             results.Add(new ValidationResult("LatePenalty should be between 1 and 3", [nameof(LatePenalty)]));
         }
 
-        if (MissedPenalty < 20 || MissedPenalty > 100)
+        if (MissedPenalty < 30 || MissedPenalty > 100)
         {
-            results.Add(new ValidationResult("MissedPenalty should be between 20 and 100", [nameof(MissedPenalty)]));
+            results.Add(new ValidationResult("MissedPenalty should be between 30 and 100", [nameof(MissedPenalty)]));
+        }
+
+        if(ExtraBreakPenalty < 0 || ExtraBreakPenalty > 2)
+        {
+            results.Add(new ValidationResult("ExtraBreakPenalty should be between 0 and 2", [nameof(ExtraBreakPenalty)]));
         }
 
         return results;

@@ -86,6 +86,13 @@ internal class MarshalDataCompiler(ILogger<MarshalDataCompiler> logger) : DataCo
                     marshalPointRecord.TimePenalty = marshalPointRecord.TimeDifference == 0 ? 0
                         : marshalPointRecord.TimeDifference > 0 ? config.LatePenalty * marshalPointRecord.TimeDifference
                         : -1 * config.EarlyPenalty * marshalPointRecord.TimeDifference;
+
+                    var breakDuration = (int)(departureTime - arrivalTime).TotalMinutes;
+
+                    if (breakDuration > currentMarshalPoint.BreakDuration)
+                    {
+                        marshalPointRecord.BreakPenalty = config.ExtraBreakPenalty * (breakDuration - currentMarshalPoint.BreakDuration);
+                    }
                 }
                 else
                 {

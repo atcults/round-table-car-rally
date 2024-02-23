@@ -4,7 +4,7 @@
 
     public List<CarMarshalPointRecord> MarshalPointRecords { get; set; } = [];
 
-    public int GetTotalTimePenalty => MarshalPointRecords.Sum(x => x.TimePenalty);
+    public int GetTotalPenalty => MarshalPointRecords.Sum(x => x.TimePenalty + x.BreakPenalty);
 
     internal class CarMarshalPointRecord
     {
@@ -45,5 +45,8 @@
 
         // Penalty for the time difference
         public int TimePenalty { get; set; }
+
+        // Break Penalty
+        public int BreakPenalty { get; set; }
     }
 }

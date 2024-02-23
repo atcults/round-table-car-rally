@@ -24,6 +24,7 @@ internal static class DataPrintHelper
         table.AddRow("Early Penalty", $"[green]{config.EarlyPenalty}[/]");
         table.AddRow("Late Penalty", $"[green]{config.LatePenalty}[/]");
         table.AddRow("Missed Penalty", $"[green]{config.MissedPenalty}[/]");
+        table.AddRow("Break Penalty", $"[green]{config.ExtraBreakPenalty}[/]");
 
         // Print the table
         AnsiConsole.Write(table);
@@ -65,12 +66,14 @@ internal static class DataPrintHelper
         table.AddColumn("Point Name");
         table.AddColumn("Distance");
         table.AddColumn("TTR");
+        table.AddColumns("BREAK");
 
         foreach (var item in marshalChart)
         {
             table.AddRow(item.PointName,
                 item.Distance.ToString(),
-                item.TimeToReach.ToString());
+                item.TimeToReach.ToString(),
+                item.BreakDuration.ToString());
         }
 
         AnsiConsole.Write(table);
@@ -162,7 +165,7 @@ internal static class DataPrintHelper
             var table = new Table
             {
                 // Add title
-                Title = new TableTitle($"[green]{result.CarNumber} Penalty: {result.GetTotalTimePenalty}[/]")
+                Title = new TableTitle($"[green]{result.CarNumber} Penalty: {result.GetTotalPenalty}[/]")
             };
 
             // Add some columns
@@ -222,7 +225,7 @@ internal static class DataPrintHelper
                 DataExtensions.TimeOnlyString(startTime),
                 DataExtensions.TimeOnlyString(endTime),
                 totalTime == 0 ? "" : TimeSpan.FromMinutes(totalTime).Humanize(2),
-                item.GetTotalTimePenalty.ToString(),
+                item.GetTotalPenalty.ToString(),
                 totalMissedPoints.ToString());
         }
 
@@ -243,7 +246,7 @@ internal static class DataPrintHelper
         orderedResultTable.AddColumn("Total Penalty");
         orderedResultTable.AddColumn("Missed Marshals");
 
-        foreach (var item in results.OrderBy(x=>x.GetTotalTimePenalty))
+        foreach (var item in results.OrderBy(x=>x.GetTotalPenalty))
         {
             var startTime = item.MarshalPointRecords.First().DepartureTime;
             var endTime = item.MarshalPointRecords.Last().ArrivalTime;
@@ -256,7 +259,7 @@ internal static class DataPrintHelper
                 DataExtensions.TimeOnlyString(startTime),
                 DataExtensions.TimeOnlyString(endTime),
                 totalTime == 0 ? "" : TimeSpan.FromMinutes(totalTime).Humanize(2),
-                item.GetTotalTimePenalty.ToString(),
+                item.GetTotalPenalty.ToString(),
                 totalMissedPoints.ToString());
         }
 
