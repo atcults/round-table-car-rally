@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using PdfSharp.Fonts;
+using ResultCalculator.Writers;
 
 using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
 ILogger logger = factory.CreateLogger("Program");
@@ -78,6 +80,10 @@ var marshalDataCompiler = new MarshalDataCompiler(factory.CreateLogger<MarshalDa
 var results = marshalDataCompiler.CompileMarshalData(config, marshalChart, marshalRecords);
 
 DataPrintHelper.PrintMarshalDataResults(results);
+
+GlobalFontSettings.FontResolver = new CustomFontResolver();
+
+ResultWriter.CreateRallyResultPdf(results);
 
 logger.ShuttingDown();
 

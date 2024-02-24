@@ -5,6 +5,16 @@
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "CarRallyData");
     }
 
+    public static string GetFontSourcePath()
+    {
+        return Path.Combine(GetDataPath(), "assets", "fonts");
+    }
+
+    public static string GetImageSourcePath()
+    {
+        return Path.Combine(GetDataPath(), "assets", "images");
+    }
+
     public static string GetRallyConfigPath()
     {
         return Path.Combine(GetDataPath(), "config.csv");
