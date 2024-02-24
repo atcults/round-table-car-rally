@@ -277,7 +277,5 @@ internal static class DataPrintHelper
         }
 
         AnsiConsole.Write(orderedResultTable);
-
-
     }
 }

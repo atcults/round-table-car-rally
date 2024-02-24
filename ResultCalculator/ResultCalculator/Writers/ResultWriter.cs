@@ -1,7 +1,7 @@
-﻿internal class ResultWriter
-{
-    
+﻿using Spectre.Console;
 
+internal class ResultWriter
+{
     public static void CreateRallyResultPdf(List<CarRallyResult> results)
     {
         var values = new List<string>
@@ -41,8 +41,31 @@
             }
 
             lastPenalty = item.GetTotalPenalty;
+
+            PrintCarResult(rank, item);
         }
 
-        new PdfTableCreator().CreateTablePdf("Rally Result 2024", [.. values]);
+        new PdfTableCreator().CreateTablePdf("Rally Result 2024", [.. values], "RallyResult");
+    }
+
+    private static void PrintCarResult(int rank, CarRallyResult result)
+    {
+        var lines = new List<string>
+            {
+                "Point,Arrival,Departure,Missed,Time Taken,Expected,Penalty"
+            };
+
+        foreach (var item in result.MarshalPointRecords)
+        {
+            lines.Add($"{item.PointName}," +
+                $"{DataExtensions.TimeOnlyString(item.ArrivalTime)}," +
+                $"{DataExtensions.TimeOnlyString(item.DepartureTime)}," +
+                $"{item.IsMissed}," +
+                $"{item.ActualTimeFromLastPoint}," +
+                $"{item.BestTimeFromLastPoint}," +
+                $"{item.TimePenalty}");
+        }
+
+        new PdfTableCreator().CreateTablePdf($"Car #{result.CarNumber} Rank:{rank} Penalty:{result.GetTotalPenalty}", [.. lines], "RESULT-" + result.CarNumber.ToString());
     }
 }

@@ -9,7 +9,7 @@ internal class PdfTableCreator
     private readonly XFont _titleFont = new ("Verdana", 14, XFontStyleEx.Bold);
     private readonly XFont _rowFont = new ("Verdana", 10, XFontStyleEx.Regular);
 
-    public void CreateTablePdf(string tableName, string[] values)
+    public void CreateTablePdf(string tableName, string[] values, string filename)
     {
         // Create a new PDF document
         PdfDocument document = new();
@@ -43,7 +43,7 @@ internal class PdfTableCreator
         }
 
         // Save the document
-        document.Save(Path.Combine(ConfigProvider.GetDataPath(), $"{tableName}.pdf"));
+        document.Save(Path.Combine(ConfigProvider.GetDataPath(), $"{filename}.pdf"));
 
         // Cleanup
         document.Dispose();
