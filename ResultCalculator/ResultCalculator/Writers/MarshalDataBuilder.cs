@@ -50,7 +50,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
             if (files.Length == 0)
             {
                 _logger.FileNotFound("MarshalData", $"{item.PointName}.*.csv");
-                return false;
+                //return false;
             }
 
             // Read each file.
@@ -112,7 +112,7 @@ internal sealed partial class MarshalDataBuilder(ILogger<MarshalDataBuilder> log
                     // check if same time captured for same car at same point.
                     var time = TimeOnly.FromDateTime(dateTime);
 
-                    if (row[pIndex].ContainsKey(time))
+                    if (row[pIndex].Where(t => (time - t.Value).TotalSeconds < 15).Any())
                     {
                         _logger.SkippingDuplicateTime(carIndex, item.PointName);
                         continue;
